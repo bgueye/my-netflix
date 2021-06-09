@@ -17,11 +17,11 @@ class Search extends Component {
 
   render() {
     return (
-        <div className="bg-gray-300 mb-4 py-4">
+        <div className="bg-gray-200 mb-4 py-4">
             <input className="rounded-2xl px-2" type="text" placeholder={this.state.placeholder}
             onChange={this.handleChange.bind(this)}/>
             <button className="bg-gray-400 hover:bg-gray-700 text-white hover:font-bold px-4 rounded-full" 
-            onClick={this.hendleClick.bind(this)}> Serch </button>  
+            onClick={this.hendleClick.bind(this)}> Search </button>  
         </div>
     );
   }

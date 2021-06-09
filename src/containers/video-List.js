@@ -4,9 +4,9 @@ import VideoListItem from '../composants/video-List-item';
 const VideoList = (props) => {
     let movieList = props.movieList
     return (
-        <div className="w-1/3 w-full bg-gray-300 ml-2 ">
-            <h1>POPULAIRE</h1>
-            <div  className="overflow-scroll h-screen" >
+        <div className="w-1/3 w-full ml-2  hauteur">
+            <div className="bg-gray-200"><h1>VIDEOS POPULAIRES</h1></div>
+            <div  className="overscroll-x-none overflow-auto hauteur" >
                 
                 <ul>
                     {
@@ -25,7 +25,6 @@ const VideoList = (props) => {
     );
 
     function recevoirCallBack(movie) {
-        console.log('je reçois le movie :', movie);
         props.callback(movie);
     }
 }

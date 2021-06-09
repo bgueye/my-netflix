@@ -27,7 +27,7 @@ class App extends React.Component {
     initMovies(){
         axios.get(`${API_END_POINT}${POPULAR_MOVIES_URL}&${API_KEY}`).then(function(res){
             this.setState({
-                movieList: res.data.results.slice(1, 6),
+                movieList: res.data.results.slice(1, 16),
                 currentMovie: res.data.results[0]
             }, function(){
                 this.applyCurrentVideo();
@@ -70,7 +70,7 @@ class App extends React.Component {
     render() {
 
         const renderVideoList = () => {
-            if(this.state.movieList.length >= 5){
+            if(this.state.movieList.length >= 15){
                 return <VideoList movieList = {this.state.movieList} callback={this.recevoirCallBack.bind(this)}/>
             }
         }
