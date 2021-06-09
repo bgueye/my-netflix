@@ -9,8 +9,8 @@ import VideoDetail from '../composants/video-detail';
 
 const API_KEY = 'api_key=b1bb009f89a909c0ae0b65bc17104e0e';
 const API_END_POINT = 'https://api.themoviedb.org/3/';
-const POPULAR_MOVIES_URL = "discover/movie?language=fr&sort_by=popularity.desc&include_adult=false&append_to_response=images"
-
+const POPULAR_MOVIES_URL = "discover/movie?language=fr&sort_by=popularity.desc&include_adult=false&append_to_response=images";
+const SEARCH_URL = "search/movie?language=fr&include_adult=false";
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -36,12 +36,14 @@ class App extends React.Component {
     }
 
     applyCurrentVideo(){
-        axios.get(`${API_END_POINT}movie/${this.state.currentMovie.id}?${API_KEY}&append_to_response=videos&include_adult=false`).then(function(res){
+        axios.get(`${API_END_POINT}movie/${this.state.currentMovie.id}?${API_KEY}&append_to_response=videos&include_adult=false`).then(function (res){
             console.log('------Movie Current------', res);
-            const youtubeKey = res.data.videos.results[0].key;
-            let newCurrentMovieState = this.state.currentMovie;
-            newCurrentMovieState.videoId = youtubeKey;
-            this.setState({ currentMovie: newCurrentMovieState });
+            if (res.data.videos && res.data.videos.results[0]) {
+                const youtubeKey = res.data.videos.results[0].key;
+                let newCurrentMovieState = this.state.currentMovie;
+                newCurrentMovieState.videoId = youtubeKey;
+                this.setState({ currentMovie: newCurrentMovieState });
+            }
         }.bind(this));
     }
 
@@ -50,6 +52,19 @@ class App extends React.Component {
             this.applyCurrentVideo();
         });
 
+    }
+
+    onClickSearch(searchText){
+        axios.get(`${API_END_POINT}${SEARCH_URL}&${API_KEY}&query=${searchText}`).then(function (res){
+            console.log('----Movie search----' ,res);
+            if (res.data && res.data.results[0]) {
+                if (res.data.results[0].id !== this.state.currentMovie.id) {
+                    this.setState({ currentMovie: res.data.results[0] }, () => {
+                        this.applyCurrentVideo();
+                    })
+                }
+            }
+        }.bind(this));
     }
 
     render() {
@@ -62,9 +77,9 @@ class App extends React.Component {
 
         return (
             <div className="App container mx-auto justify-center ">
-                <Search />
-                <div className="grid gap-2 grid-cols-4 ">
-                    <div className="col-span-3 text-center">
+                <Search callback={this.onClickSearch.bind(this)}/>
+                <div className="flex">
+                    <div className="w-2/3">
                         <Video videoId = {this.state.currentMovie.videoId}/>
                         <VideoDetail title = {this.state.currentMovie.original_title} description = {this.state.currentMovie.overview} />
                     </div>

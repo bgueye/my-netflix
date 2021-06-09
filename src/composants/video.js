@@ -5,7 +5,7 @@ const youtube = 'https://www.youtube.com/embed/';
 
 const Video = (props) => {
     let videoId = props.videoId;
-    return <iframe width="640"  height="400" src={`${youtube}${videoId}`}  />
+    return <iframe className="flex" width="640"  height="400" src={`${youtube}${videoId}`}  />
     
 }
 
