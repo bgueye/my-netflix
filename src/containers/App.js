@@ -20,7 +20,7 @@ class App extends React.Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.initMovies();
     }
 
@@ -37,7 +37,6 @@ class App extends React.Component {
 
     applyCurrentVideo(){
         axios.get(`${API_END_POINT}movie/${this.state.currentMovie.id}?${API_KEY}&append_to_response=videos&include_adult=false`).then(function (res){
-            console.log('------Movie Current------', res);
             if (res.data.videos && res.data.videos.results[0]) {
                 const youtubeKey = res.data.videos.results[0].key;
                 let newCurrentMovieState = this.state.currentMovie;
@@ -50,8 +49,15 @@ class App extends React.Component {
     recevoirCallBack(movie){
         this.setState({currentMovie: movie}, ()=> {
             this.applyCurrentVideo();
+            this.setRecommendation();
         });
 
+    }
+
+    setRecommendation(){
+        axios.get(`${API_END_POINT}movie/${this.state.currentMovie.id}/recommendations?${API_KEY}&language=fr`).then(function(res){
+            this.setState({movieList: res.data.results.slice(0, 15)});
+        }.bind(this));
     }
 
     onClickSearch(searchText){
@@ -61,6 +67,7 @@ class App extends React.Component {
                 if (res.data.results[0].id !== this.state.currentMovie.id) {
                     this.setState({ currentMovie: res.data.results[0] }, () => {
                         this.applyCurrentVideo();
+                        this.setRecommendation();
                     })
                 }
             }

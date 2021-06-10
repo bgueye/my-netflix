@@ -1,4 +1,5 @@
 import React from 'react';
+
 const VideoDetail = (props) => {
     return (
         <div className="bg-gray-200">

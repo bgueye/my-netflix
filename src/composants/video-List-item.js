@@ -16,7 +16,6 @@ const VideoListItem = (props) => {
     );
 
     function handleClick() {
-        console.log('Envois au parent : ', movie);
         props.callback(movie);
     }
 }
